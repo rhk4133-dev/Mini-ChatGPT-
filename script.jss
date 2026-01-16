@@ -1,49 +1,18 @@
-const chatBox = document.getElementById("chat-box");
-const userInput = document.getElementById("user-input");
+Create a fully working offline mini chatbot using only HTML, CSS, and JavaScript.
+Important rules (do not break these):
+Do NOT use any API, backend, server, or API key.
+The chatbot must reply using pure JavaScript logic (if/else or keyword matching).
+Split the project into three separate files:
+index.html
+style.css
+script.js
+The chatbot must:
+Reply to “hi”, “hello”, “how are you”, “help”, “bye”
+Give random replies for unknown messages
+Support Enter key to send messages
+Scroll automatically
+UI must look clean, modern, and mobile-friendly (dark theme).
+Do not pretend it is real ChatGPT or AI.
+Output the complete code for all three files, clearly separated and ready to upload to GitHub Pages.
 
-// Allow Enter key
-userInput.addEventListener("keydown", function (e) {
-  if (e.key === "Enter") {
-    sendMessage();
-  }
-});
-
-function sendMessage() {
-  const message = userInput.value.trim();
-  if (message === "") return;
-
-  addMessage(message, "user");
-  userInput.value = "";
-
-  setTimeout(() => {
-    const reply = getBotReply(message);
-    addMessage(reply, "bot");
-  }, 500);
-}
-
-function addMessage(text, sender) {
-  const msg = document.createElement("div");
-  msg.className = "message " + sender;
-  msg.innerText = text;
-  chatBox.appendChild(msg);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function getBotReply(userText) {
-  userText = userText.toLowerCase();
-
-  if (userText.includes("hi") || userText.includes("hello")) {
-    return "Hi 👋 How can I help you?";
-  }
-  if (userText.includes("who are you")) {
-    return "I am a Mini ChatGPT built using HTML, CSS and JS.";
-  }
-  if (userText.includes("help")) {
-    return "Tell me what you want to build or learn.";
-  }
-  if (userText.includes("bye")) {
-    return "Bye 👋 Come back later.";
-  }
-
-  return "I don't understand that yet 😐";
-}
+  
