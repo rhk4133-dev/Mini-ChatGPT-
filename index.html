@@ -1,24 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Mini ChatBot</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InstaClone</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <div class="chat-container">
-    <div class="header">Mini ChatGPT</div>
+<header>
+<h2>InstaClone</h2>
+</header>
 
-    <div id="chat-box"></div>
+<div class="feed">
 
-    <div class="input-area">
-      <input type="text" id="user-input" placeholder="Type a message..." />
-      <button onclick="sendMessage()">Send</button>
-    </div>
-  </div>
+<div class="post">
+<div class="post-header">
+<img src="https://i.pravatar.cc/40" class="avatar">
+<span class="username">user123</span>
+</div>
 
-  <script src="script.js"></script>
+<img src="https://picsum.photos/500/400" class="post-img">
+
+<div class="actions">
+<button onclick="likePost(this)">❤️ Like</button>
+</div>
+
+<p class="likes">0 likes</p>
+
+<div class="comments">
+<input type="text" placeholder="Add comment">
+<button onclick="addComment(this)">Post</button>
+</div>
+
+<ul class="comment-list"></ul>
+
+</div>
+
+</div>
+
+<script src="script.js"></script>
+
 </body>
 </html>
