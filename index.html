@@ -1,46 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>InstaClone</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram Demo</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
-<body>
-
-<header>
-<h2>InstaClone</h2>
-</header>
-
-<div class="feed">
-
-<div class="post">
-<div class="post-header">
-<img src="https://i.pravatar.cc/40" class="avatar">
-<span class="username">user123</span>
-</div>
-
-<img src="https://picsum.photos/500/400" class="post-img">
-
-<div class="actions">
-<button onclick="likePost(this)">❤️ Like</button>
-</div>
-
-<p class="likes">0 likes</p>
-
-<div class="comments">
-<input type="text" placeholder="Add comment">
-<button onclick="addComment(this)">Post</button>
-</div>
-
-<ul class="comment-list"></ul>
-
-</div>
-
-</div>
-
-<script src="script.js"></script>
-
-</body>
+<body><!-- Splash Screen --><div id="splash">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" class="logo">
+</div><!-- Login Page --><div id="loginPage" class="container" style="display:none;">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Instagram_logo.svg" class="title-logo">  <form id="loginForm">
+    <input type="text" name="username" placeholder="Phone number, username or email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit">Log in</button>
+  </form>  <p class="link" onclick="showForgot()">Forgot password?</p>
+</div><!-- Forgot Page --><div id="forgotPage" class="container" style="display:none;">
+  <h2>Find your account</h2>
+  <p>Enter your email, username, or phone number.</p>  <input type="text" placeholder="Email or username">
+  <button>Continue</button>  <p class="link" onclick="goBack()">Back to login</p>
+</div><script src="script.js"></script></body>
 </html>
