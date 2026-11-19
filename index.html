@@ -1,20 +1,410 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instagram Demo</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Birthday Surprise</title>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: Arial, sans-serif;
+    background: #121212;
+    color: #fff;
+    padding: 20px 16px 60px;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+h1 { font-size: 22px; margin: 8px 0 4px; }
+.sub { color: #aaa; font-size: 13px; margin-bottom: 20px; }
+
+.card {
+    background: #1c1c1c;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+label.t {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #1DB954;
+    margin-bottom: 10px;
+}
+
+input[type=text] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #262626;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+}
+
+input[type=text]:focus { border-color: #1DB954; }
+
+.photos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.slot { background: #262626; border-radius: 12px; padding: 8px; }
+
+.slot input[type=file] { display: none; }
+
+.slot input[type=text] {
+    margin-top: 8px;
+    padding: 8px;
+    font-size: 12px;
+}
+
+.pic {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 8px;
+    background: #333 center / cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.line { display: flex; gap: 8px; margin-bottom: 8px; }
+
+.x {
+    width: 42px;
+    border: none;
+    border-radius: 10px;
+    background: #333;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.btn {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    border-radius: 30px;
+    background: #1DB954;
+    color: #000;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn.ghost {
+    background: #2a2a2a;
+    color: #fff;
+}
+
+.btn:disabled { opacity: .5; }
+
+.row { display: flex; gap: 10px; margin-top: 4px; }
+
+.msg { font-size: 13px; margin-bottom: 12px; min-height: 18px; color: #1DB954; }
+.msg.err { color: #ff6b6b; }
+
+.linkbox {
+    word-break: break-all;
+    background: #262626;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin: 10px 0 12px;
+}
+</style>
 </head>
-<body><!-- Splash Screen --><div id="splash">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" class="logo">
-</div><!-- Login Page --><div id="loginPage" class="container" style="display:none;">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Instagram_logo.svg" class="title-logo">  <form id="loginForm">
-    <input type="text" name="username" placeholder="Phone number, username or email" required>
-    <input type="password" name="password" placeholder="Password" required>
-    <button type="submit">Log in</button>
-  </form>  <p class="link" onclick="showForgot()">Forgot password?</p>
-</div><!-- Forgot Page --><div id="forgotPage" class="container" style="display:none;">
-  <h2>Find your account</h2>
-  <p>Enter your email, username, or phone number.</p>  <input type="text" placeholder="Email or username">
-  <button>Continue</button>  <p class="link" onclick="goBack()">Back to login</p>
-</div><script src="script.js"></script></body> </html>
+<body>
+
+<h1>🎁 Create Birthday Surprise</h1>
+<p class="sub">Add 5 photos and your wishes, then share the link.</p>
+
+<div class="card">
+    <label class="t">BIRTHDAY PERSON'S NAME</label>
+    <input type="text" id="name" maxlength="30" placeholder="Name">
+</div>
+
+<div class="card">
+    <label class="t">5 PHOTOS (tap a square, optional caption below)</label>
+    <div class="photos" id="photos"></div>
+</div>
+
+<div class="card">
+    <label class="t">WISH TEXT (typed in the search bar)</label>
+    <div id="lines"></div>
+    <button class="btn ghost" id="addLine" type="button" style="width:100%;margin-top:4px">+ Add line</button>
+</div>
+
+<div class="card">
+    <label class="t">BACKGROUND SONG (YouTube link, optional)</label>
+    <input type="text" id="song" placeholder="https://youtu.be/...">
+</div>
+
+<p class="msg" id="msg"></p>
+
+<div class="row">
+    <button class="btn ghost" id="previewBtn" type="button">Preview</button>
+    <button class="btn" id="createBtn" type="button">Create link</button>
+</div>
+
+<div class="card" id="result" style="display:none;margin-top:16px">
+    <label class="t">YOUR LINK IS READY 🎉</label>
+    <div class="linkbox" id="linkBox"></div>
+    <div class="row">
+        <button class="btn ghost" id="copyBtn" type="button">Copy</button>
+        <button class="btn" id="openBtn" type="button">Open</button>
+    </div>
+    <div class="row">
+        <button class="btn ghost" id="waBtn" type="button">Share on WhatsApp</button>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="config.js"></script>
+
+<script>
+const DEFAULT_TITLES = [
+    "Special Moments", "Beautiful Memories", "Happy Times",
+    "Golden Moments", "One More Memory"
+];
+const MAX_LINES = 10;
+
+const blobs = [null, null, null, null, null];
+const blobUrls = [null, null, null, null, null];
+
+const msgEl = document.getElementById("msg");
+
+function showMsg(text, isErr) {
+    msgEl.textContent = text;
+    msgEl.className = "msg" + (isErr ? " err" : "");
+}
+
+/* SQUARE CROP + COMPRESS */
+
+function squareCompress(file, size) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+            const s = Math.min(img.width, img.height);
+            const sx = (img.width - s) / 2;
+            const sy = (img.height - s) * 0.25; // keeps faces in portrait photos
+            const c = document.createElement("canvas");
+            c.width = c.height = size;
+            c.getContext("2d").drawImage(img, sx, sy, s, s, 0, 0, size, size);
+            URL.revokeObjectURL(url);
+            c.toBlob(b => b ? resolve(b) : reject(new Error("fail")), "image/jpeg", 0.85);
+        };
+        img.onerror = () => reject(new Error("bad image"));
+        img.src = url;
+    });
+}
+
+/* PHOTO SLOTS */
+
+const photosBox = document.getElementById("photos");
+
+for (let i = 0; i < 5; i++) {
+    const slot = document.createElement("div");
+    slot.className = "slot";
+    slot.innerHTML =
+        '<div class="pic">Photo ' + (i + 1) + '<br>+</div>' +
+        '<input type="file" accept="image/*">' +
+        '<input type="text" maxlength="24" placeholder="' + DEFAULT_TITLES[i] + '">';
+    photosBox.appendChild(slot);
+
+    const pic = slot.querySelector(".pic");
+    const file = slot.querySelector("input[type=file]");
+
+    pic.onclick = () => file.click();
+
+    file.onchange = async () => {
+        if (!file.files[0]) return;
+        try {
+            const b = await squareCompress(file.files[0], 800);
+            blobs[i] = b;
+            if (blobUrls[i]) URL.revokeObjectURL(blobUrls[i]);
+            blobUrls[i] = URL.createObjectURL(b);
+            pic.style.backgroundImage = "url(" + blobUrls[i] + ")";
+            pic.textContent = "";
+        } catch (e) {
+            showMsg("Could not read that photo, try another one.", true);
+        }
+    };
+}
+
+/* WISH LINES */
+
+const linesBox = document.getElementById("lines");
+
+function addLine(value) {
+    if (linesBox.children.length >= MAX_LINES) {
+        showMsg("Maximum " + MAX_LINES + " lines.", true);
+        return;
+    }
+    const row = document.createElement("div");
+    row.className = "line";
+
+    const inp = document.createElement("input");
+    inp.type = "text";
+    inp.maxLength = 90;
+    inp.placeholder = "Write a wish...";
+    inp.value = value || "";
+
+    const del = document.createElement("button");
+    del.type = "button";
+    del.className = "x";
+    del.textContent = "×";
+    del.onclick = () => {
+        if (linesBox.children.length > 1) row.remove();
+    };
+
+    row.appendChild(inp);
+    row.appendChild(del);
+    linesBox.appendChild(row);
+}
+
+addLine("");
+document.getElementById("addLine").onclick = () => addLine("");
+
+/* COLLECT + CHECK */
+
+function getSongId() {
+    const v = document.getElementById("song").value.trim();
+    if (!v) return "";
+    const m = v.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
+    return m ? m[1] : null;
+}
+
+function collect() {
+    const name = document.getElementById("name").value.trim();
+    if (!name) { showMsg("Please enter the name.", true); return null; }
+
+    if (blobs.some(b => !b)) {
+        showMsg("Please add all 5 photos.", true);
+        return null;
+    }
+
+    const lines = Array.from(linesBox.querySelectorAll("input"))
+        .map(i => i.value.trim())
+        .filter(Boolean);
+    if (!lines.length) { showMsg("Write at least one wish line.", true); return null; }
+
+    const songId = getSongId();
+    if (songId === null) { showMsg("That YouTube link looks wrong.", true); return null; }
+
+    const titles = Array.from(photosBox.querySelectorAll("input[type=text]"))
+        .map((inp, i) => inp.value.trim() || DEFAULT_TITLES[i]);
+
+    showMsg("", false);
+    return { name, titles, lines, songId };
+}
+
+/* PREVIEW (same browser only) */
+
+document.getElementById("previewBtn").onclick = () => {
+    const d = collect();
+    if (!d) return;
+    d.photos = blobUrls.slice();
+    localStorage.setItem("wishPreview", JSON.stringify(d));
+    window.open("wish.html?preview=1", "_blank");
+};
+
+/* UPLOAD + SAVE */
+
+async function uploadToCloudinary(blob) {
+    const fd = new FormData();
+    fd.append("file", blob, "photo.jpg");
+    fd.append("upload_preset", CLOUDINARY_PRESET);
+
+    const r = await fetch(
+        "https://api.cloudinary.com/v1_1/" + CLOUDINARY_CLOUD + "/image/upload",
+        { method: "POST", body: fd }
+    );
+    const j = await r.json();
+    if (!r.ok || !j.secure_url) {
+        throw new Error(j.error ? j.error.message : "Upload failed");
+    }
+    return j.secure_url;
+}
+
+let finalLink = "";
+
+document.getElementById("createBtn").onclick = async () => {
+    const d = collect();
+    if (!d) return;
+
+    const btn = document.getElementById("createBtn");
+    btn.disabled = true;
+
+    try {
+        let done = 0;
+        showMsg("Uploading photos 0/5...", false);
+
+        const urls = await Promise.all(blobs.map(async b => {
+            const u = await uploadToCloudinary(b);
+            done++;
+            showMsg("Uploading photos " + done + "/5...", false);
+            return u;
+        }));
+
+        showMsg("Saving...", false);
+
+        const ref = await db.collection("wishes").add({
+            name: d.name,
+            titles: d.titles,
+            lines: d.lines,
+            songId: d.songId,
+            photos: urls,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        finalLink = location.href.split("?")[0].replace(/[^/]*$/, "") +
+                    "wish.html?id=" + ref.id;
+
+        document.getElementById("linkBox").textContent = finalLink;
+        document.getElementById("result").style.display = "block";
+        showMsg("Done!", false);
+    } catch (e) {
+        showMsg("Error: " + e.message, true);
+    }
+
+    btn.disabled = false;
+};
+
+/* RESULT BUTTONS */
+
+document.getElementById("copyBtn").onclick = () => {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(finalLink)
+            .then(() => showMsg("Link copied!", false))
+            .catch(() => prompt("Copy this link:", finalLink));
+    } else {
+        prompt("Copy this link:", finalLink);
+    }
+};
+
+document.getElementById("openBtn").onclick = () => {
+    window.open(finalLink, "_blank");
+};
+
+document.getElementById("waBtn").onclick = () => {
+    window.open("https://wa.me/?text=" +
+        encodeURIComponent("I made a surprise for you 🎁 " + finalLink), "_blank");
+};
+</script>
+
+</body>
+</html>
